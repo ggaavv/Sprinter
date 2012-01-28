@@ -743,6 +743,84 @@
 
 #endif
 
+
+//LCP17xx
+#if MOTHERBOARD == 55
+#define KNOWN_BOARD 1
+//x axis pins
+#define X_STEP_PIN      13
+#define X_STEP_PORT      2
+#define X_DIR_PIN       12
+#define X_DIR_PORT       2
+#define X_ENABLE_PIN    11 //same as E/Y_enable_pin
+#define X_ENABLE_PORT    2 //same as E/Y_enable_pin
+#define X_MIN_PIN       22
+#define X_MIN_PORT       0
+#define X_MAX_PIN       11
+#define X_MAX_PORT       0
+
+//y axis pins
+#define Y_STEP_PIN      28
+#define Y_STEP_PORT      1
+#define Y_DIR_PIN       29
+#define Y_DIR_PORT       1
+#define Y_ENABLE_PIN    10 //same as E/X_enable_pin
+#define Y_ENABLE_PORT    0 //same as E/X_enable_pin
+#define Y_MIN_PIN       27
+#define Y_MIN_PORT       1
+#define Y_MAX_PIN       23
+#define Y_MAX_PORT       1
+
+//z axis pins
+#define Z_STEP_PIN      24
+#define Z_STEP_PORT      1
+#define Z_DIR_PIN       25
+#define Z_DIR_PORT       1
+#define Z_ENABLE_PIN    26
+#define Z_ENABLE_PORT    1
+#define Z_MIN_PIN       22
+#define Z_MIN_PORT       1
+#define Z_MAX_PIN       25
+#define Z_MAX_PORT       3
+
+#define E_DIR_PIN        19
+#define E_DIR_PORT       1
+#define E_STEP_PIN	20
+#define E_STEP_PORT	1
+#define E_ENABLE_PIN	21 //same as X/Y_enable_pin
+#define E_ENABLE_PORT	1 //same as X/Y_enable_pin
+
+//heaters
+
+//pin for hot end heater
+#define HEATER_0_PIN	16
+#define HEATER_0_PIN	16
+
+//Pin for heated bed heater
+#define HEATER_1_PIN	17
+#define HEATER_1_PIN	17
+
+
+//pin for debugging.
+#define DEBUG_PIN        -1
+#define DEBUG_PIN        -1
+
+//SD card pin
+
+#define SDSS		  4
+#define SDSS		  4
+
+#define SDPOWER          -1
+#define FAN_PIN          -1
+#define TEMP_0_PIN        0
+#define TEMP_1_PIN        5
+#define LED_PIN          -1
+
+//pin for controlling the PSU.
+#define PS_ON_PIN       -1
+
+#endif
+
 #ifndef KNOWN_BOARD
 #error Unknown MOTHERBOARD value in configuration.h
 #endif

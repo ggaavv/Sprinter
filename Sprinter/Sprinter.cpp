@@ -10,6 +10,13 @@
 #include "SdFat.h"
 #endif
 
+//LPC17xx
+#include "lpc_types.h"
+#include "LPC17xx.h"
+#include "lpc17xx_timer.h"
+#include "lpc17xx_nvic.h"
+
+
 // look here for descriptions of gcodes: http://linuxcnc.org/handbook/gcode/g-code.html
 // http://objects.reprap.org/wiki/Mendel_User_Manual:_RepRapGCodes
 
@@ -1284,7 +1291,7 @@ inline void linear_move(unsigned long axis_steps_remaining[]) // make linear mov
   acceleration_enabled = true;
   unsigned long full_interval = interval;
   if(interval > max_interval) acceleration_enabled = false;
-  bool decelerating = false;
+  boolean decelerating = false;
   #endif
   
   unsigned long start_move_micros = micros();

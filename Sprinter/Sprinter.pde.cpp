@@ -266,7 +266,13 @@ void cfg_timer0() {
 	TIM_Cmd(LPC_TIM0,ENABLE);
 }
 
+#ifdef HEATER_CURRENT
+  #define HEATER_CURRENT 255
+#endif
+void main()
+
 void setup()
+#endif
 { 
 	//LPC17xx setup
 	cfg_timer0();
@@ -278,6 +284,20 @@ void setup()
   }
 
   
+  //LPC17xx Initialize Dir Pins
+  #if X_DIR_PIN > -1
+    GPIO_SetDir(GPIO_GetDir(X_DIR_PORT) | (1 << X_DIR_PIN), X_DIR_PIN, 1);
+  #endif
+  #if Y_DIR_PIN > -1
+    GPIO_SetDir(GPIO_GetDir(Y_DIR_PORT) | (1 << Y_DIR_PIN), Y_DIR_PIN, 1);
+  #endif
+  #if Z_DIR_PIN > -1
+    GPIO_SetDir(GPIO_GetDir(Z_DIR_PORT) | (1 << Z_DIR_PIN), Z_DIR_PIN, 1);
+  #endif
+  #if E_DIR_PIN > -1
+    GPIO_SetDir(GPIO_GetDir(E_DIR_PORT) | (1 << E_DIR_PIN), E_DIR_PIN, 1);
+  #endif
+
   //Initialize Dir Pins
   #if X_DIR_PIN > -1
     SET_OUTPUT(X_DIR_PIN);
@@ -292,6 +312,24 @@ void setup()
     SET_OUTPUT(E_DIR_PIN);
   #endif
   
+    //LPC17xx Initialize Enable Pins - steppers default to disabled.
+    #if (X_ENABLE_PIN > -1)
+      GPIO_SetDir(X_ENABLE_PORT, (GPIO_GetDir(X_ENABLE_PORT) | (1 << X_ENABLE_PIN)), 1);
+      if(!X_ENABLE_ON) {FIO_SetMask(X_ENABLE_PORT, 0xffffffff | (1 << X_ENABLE_PIN), 1); GPIO_SetValue(X_ENABLE_PORT, 0xffffffff);}
+    #endif
+    #if (Y_ENABLE_PIN > -1)
+      GPIO_SetDir(Y_ENABLE_PORT, (GPIO_GetDir(Y_ENABLE_PORT) | (1 << Y_ENABLE_PIN)), 1);
+    if(!Y_ENABLE_ON) {FIO_SetMask(Y_ENABLE_PORT, 0xffffffff | (1 << Y_ENABLE_PIN), 1); GPIO_SetValue(Y_ENABLE_PORT, 0xffffffff);}
+    #endif
+    #if (Z_ENABLE_PIN > -1)
+    GPIO_SetDir(Z_ENABLE_PORT, (GPIO_GetDir(Z_ENABLE_PORT) | (1 << Z_ENABLE_PIN)), 1);
+      if(!Z_ENABLE_ON) {FIO_SetMask(Z_ENABLE_PORT, 0xffffffff | (1 << Z_ENABLE_PIN), 1); GPIO_SetValue(Z_ENABLE_PORT, 0xffffffff);}
+    #endif
+    #if (E_ENABLE_PIN > -1)
+      GPIO_SetDir(E_ENABLE_PORT, (GPIO_GetDir(E_ENABLE_PORT) | (1 << E_ENABLE_PIN)), 1);
+      if(!E_ENABLE_ON) {FIO_SetMask(E_ENABLE_PORT, 0xffffffff | (1 << E_ENABLE_PIN), 1); GPIO_SetValue(E_ENABLE_PORT, 0xffffffff);}
+    #endif
+
   //Initialize Enable Pins - steppers default to disabled.
   
   #if (X_ENABLE_PIN > -1)
@@ -315,6 +353,64 @@ void setup()
     SET_OUTPUT(CONTROLLERFAN_PIN); //Set pin used for driver cooling fan
   #endif
   
+    //LPC17xx endstops and pullups
+    #ifdef ENDSTOPPULLUPS
+    #if X_MIN_PIN > -1
+    	GPIO_SetDir(X_MIN_PORT, (GPIO_GetDir(X_MIN_PORT) | (1 << X_MIN_PIN)), 0);
+    	FIO_SetMask(X_MIN_PORT, 0xffffffff | (1 << X_MIN_PIN), 1); GPIO_SetValue(X_MIN_PORT, 0xffffffff);
+    #endif
+    #if X_MAX_PIN > -1
+    	GPIO_SetDir(X_MAX_PORT, (GPIO_GetDir(X_MAX_PORT) | (1 << X_MAX_PIN)), 0);
+    	FIO_SetMask(X_MAX_PORT, 0xffffffff | (1 << X_MAX_PIN), 1); GPIO_SetValue(X_MAX_PORT, 0xffffffff);
+    #endif
+    #if Y_MIN_PIN > -1
+    	GPIO_SetDir(Y_MIN_PORT, (GPIO_GetDir(Y_MIN_PORT) | (1 << Y_MIN_PIN)), 0);
+    	FIO_SetMask(Y_MIN_PORT, 0xffffffff | (1 << Y_MIN_PIN), 1); GPIO_SetValue(Y_MIN_PORT, 0xffffffff);
+    #endif
+    #if Y_MAX_PIN > -1
+    	GPIO_SetDir(Y_MAX_PORT, (GPIO_GetDir(Y_MAX_PORT) | (1 << Y_MAX_PIN)), 0);
+    	FIO_SetMask(Y_MAX_PORT, 0xffffffff | (1 << Y_MAX_PIN), 1); GPIO_SetValue(Y_MAX_PORT, 0xffffffff);
+    #endif
+    #if Z_MIN_PIN > -1
+    	GPIO_SetDir(Z_MIN_PORT, (GPIO_GetDir(Z_MIN_PORT) | (1 << Z_MIN_PIN)), 0);
+    	FIO_SetMask(Z_MIN_PORT, 0xffffffff | (1 << Z_MIN_PIN), 1); GPIO_SetValue(Z_MIN_PORT, 0xffffffff);
+    #endif
+    #if Z_MAX_PIN > -1
+    	GPIO_SetDir(Z_MAX_PORT, (GPIO_GetDir(Z_MAX_PORT) | (1 << Z_MAX_PIN)), 0);
+    	FIO_SetMask(Z_MAX_PORT, 0xffffffff | (1 << Z_MAX_PIN), 1); GPIO_SetValue(Z_MAX_PORT, 0xffffffff);
+    #endif
+    #else
+    #if X_MIN_PIN > -1
+    	GPIO_SetDir(X_MIN_PORT, (GPIO_GetDir(X_MIN_PORT) | (1 << X_MIN_PIN)), 0);
+    #endif
+    #if X_MAX_PIN > -1
+    	GPIO_SetDir(X_MAX_PORT, (GPIO_GetDir(X_MAX_PORT) | (1 << X_MAX_PIN)), 0);
+    #endif
+    #if Y_MIN_PIN > -1
+    	GPIO_SetDir(Y_MIN_PORT, (GPIO_GetDir(Y_MIN_PORT) | (1 << Y_MIN_PIN)), 0);
+    #endif
+    #if Y_MAX_PIN > -1
+    	GPIO_SetDir(Y_MAX_PORT, (GPIO_GetDir(Y_MAX_PORT) | (1 << Y_MAX_PIN)), 0);
+    #endif
+    #if Z_MIN_PIN > -1
+    	GPIO_SetDir(Z_MIN_PORT, (GPIO_GetDir(Z_MIN_PORT) | (1 << Z_MIN_PIN)), 0);
+    #endif
+    #if Z_MAX_PIN > -1
+    	GPIO_SetDir(Z_MAX_PORT, (GPIO_GetDir(Z_MAX_PORT) | (1 << Z_MAX_PIN)), 0);
+    #endif
+    #endif
+
+    #if (HEATER_0_PIN > -1)
+        GPIO_SetDir(HEATER_0_PORT, (GPIO_GetDir(HEATER_0_PORT) | (1 << HEATER_0_PIN)), 1);
+        FIO_SetMask(HEATER_0_PORT, ~(1 << HEATER_0_PIN), 1);
+        GPIO_ClearValue(HEATER_0_PORT, 0xffffffff);
+    #endif
+    #if (HEATER_1_PIN > -1)
+        GPIO_SetDir(HEATER_1_PORT, (GPIO_GetDir(HEATER_1_PORT) | (1 << HEATER_1_PIN)), 1);
+        FIO_SetMask(HEATER_1_PORT, ~(1 << HEATER_1_PIN), 1);
+        GPIO_ClearValue(HEATER_1_PORT, 0xffffffff);
+    #endif
+
   //endstops and pullups
   #ifdef ENDSTOPPULLUPS
   #if X_MIN_PIN > -1
@@ -1291,7 +1387,7 @@ inline void linear_move(unsigned long axis_steps_remaining[]) // make linear mov
   acceleration_enabled = true;
   unsigned long full_interval = interval;
   if(interval > max_interval) acceleration_enabled = false;
-  boolean decelerating = false;
+  bool decelerating = false;
   #endif
   
   unsigned long start_move_micros = micros();

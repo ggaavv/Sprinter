@@ -469,15 +469,15 @@ void FIO_SetMask(uint8_t portNum, uint32_t bitValue, uint8_t maskValue)
 	LPC_GPIO_TypeDef *pFIO = GPIO_GetPointer(portNum);
 	if(pFIO != NULL) {
 		// Mask
-//		if (maskValue){
-//			pFIO->FIOMASK |= bitValue;
+		if (maskValue){
+			pFIO->FIOMASK |= bitValue;
 			pFIO->FIOMASK = bitValue;
-//		}
+		}
 		// Un-mask
-//		else {
-//			pFIO->FIOMASK &= ~bitValue;
-//			pFIO->FIOMASK = ~bitValue;
-//		}
+		else {
+			pFIO->FIOMASK &= ~bitValue;
+			pFIO->FIOMASK = ~bitValue;
+		}
 	}
 }
 
